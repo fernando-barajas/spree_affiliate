@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_paths = ["lib"]
 
-  s.add_dependency('spree_core', '>= 1.0.0')
-  s.add_dependency('spree_auth', '>= 1.0.0')
+  s.add_dependency('spree_core', '>= 1.2.0')
+  s.add_dependency('spree_auth', '>= 1.2.0')
   s.add_dependency('spree_store_credits', '>= 1.0.0')
 
   s.add_development_dependency 'capybara', '1.0.1'
