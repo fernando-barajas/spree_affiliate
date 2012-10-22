@@ -17,8 +17,15 @@
 	<%= text_field_tag('preferences[sender_credit_on_purchase_amount]', SpreeAffiliate::Config[:sender_credit_on_purchase_amount]) %>
   </p>
   <p>
+	<label><%= t("sender_credit_on_purchase_amount_percent") %></label>
+	<%= text_field_tag('preferences[sender_credit_on_purchase_amount_percent]', SpreeAffiliate::Config[:sender_credit_on_purchase_amount_percent]) %>
+  </p>
+  <p>
 	<label><%= t('recipient_credit_on_purchase_amount') %></label>
 	<%= text_field_tag('preferences[recipient_credit_on_purchase_amount]', SpreeAffiliate::Config[:recipient_credit_on_purchase_amount])%>
+  </p>
+	<label><%= t('recipient_credit_on_purchase_amount_percent') %></label>
+	<%= text_field_tag('preferences[recipient_credit_on_purchase_amount_percent]', SpreeAffiliate::Config[:recipient_credit_on_purchase_amount_percent])%>
   </p>
 
   <p class="form-buttons">

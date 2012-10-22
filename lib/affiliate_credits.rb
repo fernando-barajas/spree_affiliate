@@ -1,29 +1,35 @@
 module AffiliateCredits
   private
 
-  def create_affiliate_credits(sender, recipient, event)
+  def create_affiliate_credits(sender, recipient, event, order)
     #check if sender should receive credit on affiliate register
-    if sender_credit_amount = SpreeAffiliate::Config["sender_credit_on_#{event}_amount".to_sym] and sender_credit_amount.to_f > 0
+    sender_credit_amount = [SpreeAffiliate::Config["sender_credit_on_#{event}_amount".to_sym].to_f,
+                            (SpreeAffiliate::Config["sender_credit_on_#{event}_amount_percent".to_sym].to_f / 100.0) * order.total
+                            ].max
+    if sender_credit_amount.to_f > 0
       credit = Spree::StoreCredit.create(:amount => sender_credit_amount,
                          :remaining_amount => sender_credit_amount,
                          :reason => "Affiliate: #{event}", :user_id => sender.id)
 
-      log_event recipient.affiliate_partner, sender, credit, event
+      log_event recipient.affiliate_partner, sender, credit, event, order
     end
 
     #check if affiliate should recevied credit on sign up
-    if recipient_credit_amount = SpreeAffiliate::Config["recipient_credit_on_#{event}_amount".to_sym] and recipient_credit_amount.to_f > 0
+    recipient_credit_amount = [SpreeAffiliate::Config["recipient_credit_on_#{event}_amount".to_sym].to_f,
+                              (SpreeAffiliate::Config["recipient_credit_on_#{event}_amount_percent".to_sym].to_f / 100.0) * order.total
+                              ]
+    if recipient_credit_amount.to_f > 0
       credit = Spree::StoreCredit.create(:amount => recipient_credit_amount,
                          :remaining_amount => recipient_credit_amount,
                          :reason => "Affiliate: #{event}", :user => recipient)
 
-      log_event recipient.affiliate_partner, recipient, credit, event
+      log_event recipient.affiliate_partner, recipient, credit, event, order
     end
 
   end
 
-  def log_event(affiliate, user, credit, event)
-    affiliate.events.create(:reward => credit, :name => event, :user => user)
+  def log_event(affiliate, user, credit, event, order)
+    affiliate.events.create(:reward => credit, :name => event, :user => user, :order => order)
   end
 
 end
