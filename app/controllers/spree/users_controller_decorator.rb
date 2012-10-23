@@ -19,4 +19,5 @@ Spree::UserRegistrationsController.class_eval do
     #destroy the cookie, as the affiliate record has been created.
     cookies[:ref_id] = nil
   end
+
 end

@@ -54,5 +54,17 @@ feature 'affiliate store credit feature' do
     click_button "Save and Continue"
     page.should have_content("Your order has been processed successfully")
   end
+  
+  scenario "sender credit on purchase", :js => true do
+    reset_affiliate_preferences do |config|
+      config.sender_credit_on_purchase_amount = 30
+    end
+    
+    visit "/ref_id=#{sender.ref_id}"
+    add_product_to_cart_and_fill_address
+    click_button "Save and Continue"
+    
+    Spree::AffiliateReward.where(:user => user).count.should == 1
+  end
 
 end
