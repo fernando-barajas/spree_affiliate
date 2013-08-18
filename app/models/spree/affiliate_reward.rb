@@ -3,12 +3,14 @@ module Spree
     belongs_to :user, :class_name => 'Spree::User', :foreign_key => :user_id
     belongs_to :original_order, :class_name => 'Spree::Order', :foreign_key => :order_id
   
-    attr_accessible :user, :order, :amount, :date_paid_out, :date_deleted, :comment, :paid
-  
-    # scope :ordered, order("order.created_at DESC")
+    attr_accessible :user, :amount, :date_paid_out, :date_deleted, :comment, :paid
+    
+    scope :ordered, order("order_id DESC")
+    
+    default_scope ordered
       
     def paid?
-      date_paid_out.present?
+      !date_paid_out.nil?
     end
     
     def paid=(object)
